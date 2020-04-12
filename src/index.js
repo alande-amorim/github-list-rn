@@ -1,15 +1,14 @@
 import React from 'react';
-import { Text, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
+import Routes from './routes';
 
 import './config/ReactotronConfig';
-
-console.tron.log('hello world');
 
 export default function App() {
   return (
     <>
-      <StatusBar barStyle="dark-content" />
-      <Text>GitHub List</Text>
+      <StatusBar barStyle="light-content" backgroundColor="#7159c1" />
+      <Routes />
     </>
   );
 }
