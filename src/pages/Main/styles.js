@@ -72,14 +72,34 @@ export const Bio = styled.Text.attrs({
   text-align: center;
 `;
 
-export const ProfileButton = styled(RectButton)`
+export const ButtonsContainer = styled.View`
   margin-top: 10px;
+  flex-direction: row;
+  width: 100%;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ProfileButton = styled(RectButton)`
   align-self: stretch;
   border-radius: 4px;
   background: #7159c1;
   justify-content: center;
   align-items: center;
   height: 36px;
+  padding: 0 20px;
+  margin-right: 10px;
+`;
+
+export const RemoveProfileButton = styled(RectButton)`
+  align-self: stretch;
+  border-radius: 4px;
+  background: #7159c1;
+  justify-content: center;
+  align-items: center;
+  height: 36px;
+  padding: 0 10px;
 `;
 
 export const ProfileButtonText = styled.Text`

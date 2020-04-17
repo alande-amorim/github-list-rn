@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
+import { ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 import api from '../../services/api';
 
+import UserHeader from '../../components/UserHeader';
+
 import {
   Container,
-  Header,
-  Avatar,
-  Name,
-  Bio,
   Star,
   Starred,
   OwnerAvatar,
@@ -19,6 +18,7 @@ import {
 export default class User extends Component {
   state = {
     stars: [],
+    loading: false,
     page: 1,
   };
 
@@ -37,29 +37,30 @@ export default class User extends Component {
     const { page, stars } = this.state;
     const { user } = route.params;
 
+    console.tron.log(user);
+
+    this.setState({ loading: true });
     const response = await api.get(`/users/${user.login}/starred?page=${page}`);
     this.setState({
       stars: [...stars, ...response.data],
       page: page + 1,
+      loading: false,
     });
   };
 
   render() {
     const { route } = this.props;
     const { user } = route.params;
-    const { stars } = this.state;
+    const { stars, loading } = this.state;
 
     return (
       <Container>
-        <Header>
-          <Avatar source={{ uri: user.avatar }} />
-          <Name>{user.name}</Name>
-          <Bio>{user.bio}</Bio>
-        </Header>
+        <UserHeader user={user} />
 
         <Star
           data={stars}
           keyExtractor={(star) => String(star.id)}
+          onEndReachedThreshold={0.2}
           onEndReached={this.fetchStars}
           renderItem={({ item }) => (
             <Starred>
@@ -71,6 +72,8 @@ export default class User extends Component {
             </Starred>
           )}
         />
+
+        {loading && <ActivityIndicator />}
       </Container>
     );
   }
