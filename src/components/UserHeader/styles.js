@@ -4,9 +4,7 @@ export const Container = styled.View`
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  padding-bottom: 20px;
-  border-bottom-width: 1px;
-  border-color: #ddd;
+  padding-bottom: 0px;
 `;
 
 export const Avatar = styled.Image`
@@ -17,7 +15,9 @@ export const Avatar = styled.Image`
   background: #eee;
 `;
 
-export const HeaderTextContainer = styled.View``;
+export const HeaderTextContainer = styled.View`
+  flex: 1;
+`;
 
 export const Name = styled.Text`
   font-size: 20px;
@@ -26,10 +26,11 @@ export const Name = styled.Text`
   text-align: left;
 `;
 
-export const Bio = styled.Text`
+export const Bio = styled.Text.attrs({
+  numberOfLines: 2,
+})`
   font-size: 14px;
   line-height: 18px;
   color: #999;
-  /* margin-top: 5px; */
   text-align: left;
 `;

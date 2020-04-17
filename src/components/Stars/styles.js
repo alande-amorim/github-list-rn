@@ -2,7 +2,6 @@ import styled from 'styled-components/native';
 
 export const Container = styled.View`
   flex: 1;
-  padding: 30px;
 `;
 
 export const Star = styled.FlatList.attrs({
@@ -44,12 +43,4 @@ export const Author = styled.Text`
   font-size: 13px;
   color: #666;
   margin-top: 2px;
-`;
-
-export const Badge = styled.Text`
-  background: #7159c1;
-  padding: 2px 6px;
-  font-size: 10px;
-  border-radius: 10px;
-  color: #fff;
 `;

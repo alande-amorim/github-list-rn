@@ -1,80 +1,66 @@
-import React, { Component } from 'react';
-import { ActivityIndicator } from 'react-native';
-import PropTypes from 'prop-types';
-import api from '../../services/api';
+import * as React from 'react';
+import { Text, Dimensions } from 'react-native';
+import { TabView, TabBar } from 'react-native-tab-view';
 
 import UserHeader from '../../components/UserHeader';
+import Stars from '../../components/Stars';
+import Repos from '../../components/Repos';
+import { Container, Badge } from './styles';
 
-import {
-  Container,
-  Star,
-  Starred,
-  OwnerAvatar,
-  Info,
-  Title,
-  Author,
-} from './styles';
+export default function TabViewExample({ route }) {
+  const { user } = route.params;
 
-export default class User extends Component {
-  state = {
-    stars: [],
-    loading: false,
-    page: 1,
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: 'stars', title: 'Stars' },
+    { key: 'repos', title: 'Repos', qtty: user.repos },
+  ]);
+
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      default:
+      case 'stars':
+        return <Stars user={user} />;
+      case 'repos':
+        return <Repos user={user} />;
+    }
   };
 
-  static propTypes = {
-    route: PropTypes.shape({
-      params: PropTypes.object,
-    }).isRequired,
-  };
+  const renderTabBar = (props) => (
+    <TabBar
+      {...props}
+      indicatorStyle={{ backgroundColor: '#666' }}
+      renderBadge={({ route }) =>
+        route.qtty && <Badge>{route.qtty > 99 ? '99+' : route.qtty}</Badge>
+      }
+      renderLabel={({ route, focused, color }) => (
+        <Text
+          style={{
+            color: focused ? '#666' : '#AAA',
+            margin: 8,
+            textTransform: 'uppercase',
+            fontWeight: 'bold',
+            fontSize: 12,
+          }}
+        >
+          {route.title}
+        </Text>
+      )}
+      style={{ backgroundColor: 'transparent', elevation: 0 }}
+    />
+  );
 
-  componentDidMount() {
-    this.fetchStars();
-  }
+  return (
+    <Container>
+      <UserHeader user={user} />
 
-  fetchStars = async () => {
-    const { route } = this.props;
-    const { page, stars } = this.state;
-    const { user } = route.params;
-
-    console.tron.log(user);
-
-    this.setState({ loading: true });
-    const response = await api.get(`/users/${user.login}/starred?page=${page}`);
-    this.setState({
-      stars: [...stars, ...response.data],
-      page: page + 1,
-      loading: false,
-    });
-  };
-
-  render() {
-    const { route } = this.props;
-    const { user } = route.params;
-    const { stars, loading } = this.state;
-
-    return (
-      <Container>
-        <UserHeader user={user} />
-
-        <Star
-          data={stars}
-          keyExtractor={(star) => String(star.id)}
-          onEndReachedThreshold={0.2}
-          onEndReached={this.fetchStars}
-          renderItem={({ item }) => (
-            <Starred>
-              <OwnerAvatar source={{ uri: item.owner.avatar_url }} />
-              <Info>
-                <Title>{item.name}</Title>
-                <Author>{item.owner.login}</Author>
-              </Info>
-            </Starred>
-          )}
-        />
-
-        {loading && <ActivityIndicator />}
-      </Container>
-    );
-  }
+      <TabView
+        renderTabBar={renderTabBar}
+        renderScene={renderScene}
+        navigationState={{ index, routes }}
+        onIndexChange={setIndex}
+        initialLayout={{ width: Dimensions.get('window').width }}
+      />
+    </Container>
+  );
 }

@@ -64,6 +64,7 @@ export default class Main extends Component {
         login: response.data.login,
         bio: response.data.bio,
         avatar: response.data.avatar_url,
+        repos: response.data.public_repos,
       };
 
       this.setState({
